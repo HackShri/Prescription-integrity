@@ -8,6 +8,7 @@ import DoctorDashboard from './pages/DoctorDashboard';
 import PatientDashboard from './pages/PatientDashboard';
 import ShopDashboard from './pages/ShopDashboard';
 import AdminDashboard from './pages/AdminDashboard';
+import Scanner from './pages/Scanner';
 import Home from './components/Home';
 import "./index.css";
 
@@ -35,6 +36,7 @@ const AppContent = () => {
               )
             }
           />
+          <Route path="/scanner" element={user ? <Scanner /> : <Navigate to="/login" />} />
         </Routes>
       </div>
     </Router>
