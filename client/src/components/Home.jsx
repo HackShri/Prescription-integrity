@@ -1,21 +1,29 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Card, CardHeader, CardTitle, CardContent, CardFooter } from './ui/card';
+import { Button } from './ui/button';
 
 const Home = () => {
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Prescription App</h1>
-        <p className="text-lg mb-6">Manage prescriptions, track medications, and more.</p>
-        <div className="space-x-4">
-          <Link to="/login" className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600">
-            Login
-          </Link>
-          <Link to="/signup" className="bg-green-500 text-white p-2 rounded-md hover:bg-green-600">
-            Sign Up
-          </Link>
-        </div>
-      </div>
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-12">
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle className="text-3xl font-bold">Welcome to Prescription App</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-sm text-muted-foreground mb-6">
+            Manage prescriptions, track medications, and more.
+          </p>
+        </CardContent>
+        <CardFooter className="flex justify-center space-x-4">
+          <Button asChild>
+            <Link to="/login">Login</Link>
+          </Button>
+          <Button variant="outline" asChild>
+            <Link to="/signup">Sign Up</Link>
+          </Button>
+        </CardFooter>
+      </Card>
     </div>
   );
 };

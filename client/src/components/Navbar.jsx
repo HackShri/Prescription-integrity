@@ -1,37 +1,86 @@
-import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext.jsx';
+import { Button } from './ui/button';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from './ui/sheet';
+import { Menu } from 'lucide-react';
+import Headroom from 'react-headroom';
 
 const Navbar = () => {
   const { user, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleSidebar = () => setIsOpen(!isOpen);
 
   return (
-    <nav className="bg-blue-600 px-4 py-3 shadow-md">
-  <div className="max-w-7xl mx-auto flex justify-between items-center">
-    <Link to="/" className="text-white text-2xl font-semibold">
-      Prescription App
-    </Link>
-    <div className="space-x-4 text-sm">
-      {user ? (
-        <>
-          <span className="text-white capitalize">{user.role}</span>
-          <button onClick={logout} className="text-white hover:underline">
-            Logout
-          </button>
-        </>
-      ) : (
-        <>
-          <Link to="/login" className="text-white hover:underline">
-            Login
-          </Link>
-          <Link to="/signup" className="text-white hover:underline">
-            Sign Up
-          </Link>
-        </>
-      )}
-    </div>
-  </div>
-</nav>
+    <Headroom
+      style={{
+        position: 'fixed',
+        zIndex: 50,
+        width: '100%',
+      }}
+    >
+      <header className="w-full bg-card shadow-md">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between py-4">
+            <div className="flex items-center">
+              <Sheet open={isOpen} onOpenChange={setIsOpen}>
+                <SheetTrigger asChild>
+                  <Button variant="ghost" size="icon" className="mr-4">
+                    <Menu className="h-6 w-6" />
+                    <span className="sr-only">Toggle menu</span>
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="left">
+                  <SheetHeader>
+                    <SheetTitle>Menu</SheetTitle>
+                  </SheetHeader>
+                  <nav className="mt-6">
+                    <ul className="space-y-4">
+                      <li>
+                        <Link to="/" className="text-lg hover:underline" onClick={() => setIsOpen(false)}>
+                          Home
+                        </Link>
+                      </li>
+                      {user && (
+                        <li>
+                          <Link to="/dashboard" className="text-lg hover:underline" onClick={() => setIsOpen(false)}>
+                            Dashboard
+                          </Link>
+                        </li>
+                      )}
+                    </ul>
+                  </nav>
+                </SheetContent>
+              </Sheet>
+              <h1 className="text-xl font-bold">
+                <Link to="/">Prescription App</Link>
+              </h1>
+            </div>
+            <div className="flex items-center space-x-4">
+              {user ? (
+                <>
+                  <span className="text-sm capitalize text-foreground">{user.role}</span>
+                  <Button variant="outline" onClick={() => { logout(); navigate('/'); }}>
+                    Logout
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button variant="outline" onClick={() => navigate('/login')}>
+                    Login
+                  </Button>
+                  <Button onClick={() => navigate('/signup')}>
+                    Sign Up
+                  </Button>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      </header>
+    </Headroom>
   );
 };
 
