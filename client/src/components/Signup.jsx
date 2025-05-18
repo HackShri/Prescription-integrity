@@ -14,6 +14,7 @@ const Signup = () => {
     email: '',
     password: '',
     role: 'patient',
+    secretCode: '',
     age: '',
     weight: '',
     height: ''
@@ -39,6 +40,9 @@ const Signup = () => {
         delete payload.age;
         delete payload.weight;
         delete payload.height;
+      }
+      if (form.role === 'admin' && !form.secretCode) {
+        throw new Error('Secret code is required for admin signup');
       }
       const { data } = await axios.post('http://localhost:5000/api/auth/signup', payload);
       login(data.token);
@@ -107,6 +111,19 @@ const Signup = () => {
                 <option value="admin">Admin</option>
               </select>
             </div>
+            {form.role === 'admin' && (
+              <div className='space-y-2'>
+                <Label hemlFor='secretCode'>Secret Code</Label>
+                <Input
+                  id='secretCode'
+                  name='secretCode'
+                  type='text'
+                  placeholder='Enter secret code'
+                  value={form.secretCode}
+                  onChange={handleChange}
+                  required
+                />
+                </div>)}
             {form.role === 'patient' && (
               <>
                 <div className="space-y-2">
