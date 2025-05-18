@@ -4,26 +4,36 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext.jsx';
 
 const Signup = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [role, setRole] = useState('patient');
-  const [age, setAge] = useState('');
-  const [weight, setWeight] = useState('');
-  const [height, setHeight] = useState('');
+  const [form, setForm] = useState({
+    name: '',
+    email: '',
+    password: '',
+    role: 'patient',
+    age: '',
+    weight: '',
+    height: ''
+  });
   const [error, setError] = useState('');
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     try {
-      const payload = { name, email, password, role };
-      if (role === 'patient') {
-        payload.age = parseInt(age);
-        payload.weight = parseFloat(weight);
-        payload.height = parseFloat(height);
+      const payload = { ...form };
+      if (form.role === 'patient') {
+        payload.age = parseInt(form.age);
+        payload.weight = parseFloat(form.weight);
+        payload.height = parseFloat(form.height);
+      } else {
+        delete payload.age;
+        delete payload.weight;
+        delete payload.height;
       }
       const { data } = await axios.post('http://localhost:5000/api/auth/signup', payload);
       login(data.token);
@@ -34,98 +44,37 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      <div className="max-w-md w-full p-6 bg-white rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold mb-6 text-center">Sign Up</h2>
-        {error && <p className="text-red-500 mb-4">{error}</p>}
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-blue-100 px-4">
+      <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-lg">
+        <h2 className="text-3xl font-bold text-center text-green-600 mb-6">Create Account</h2>
+        {error && <p className="text-red-500 text-sm mb-4 text-center">{error}</p>}
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Name</label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Role</label>
-            <select
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
-              className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="patient">Patient</option>
-              <option value="doctor">Doctor</option>
-              <option value="shop">Medical Shop Owner</option>
-              <option value="admin">Admin</option>
-            </select>
-          </div>
-          {role === 'patient' && (
+          <input name="name" placeholder="Full Name" value={form.name} onChange={handleChange} className="input-style" required />
+          <input name="email" placeholder="Email" value={form.email} onChange={handleChange} type="email" className="input-style" required />
+          <input name="password" placeholder="Password" value={form.password} onChange={handleChange} type="password" className="input-style" required />
+
+          <select name="role" value={form.role} onChange={handleChange} className="input-style">
+            <option value="patient">Patient</option>
+            <option value="doctor">Doctor</option>
+            <option value="shop">Medical Shop Owner</option>
+            <option value="admin">Admin</option>
+          </select>
+
+          {form.role === 'patient' && (
             <>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Age</label>
-                <input
-                  type="number"
-                  value={age}
-                  onChange={(e) => setAge(e.target.value)}
-                  className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Weight (kg)</label>
-                <input
-                  type="number"
-                  value={weight}
-                  onChange={(e) => setWeight(e.target.value)}
-                  className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Height (cm)</label>
-                <input
-                  type="number"
-                  value={height}
-                  onChange={(e) => setHeight(e.target.value)}
-                  className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
-                />
-              </div>
+              <input name="age" placeholder="Age" value={form.age} onChange={handleChange} type="number" className="input-style" />
+              <input name="weight" placeholder="Weight (kg)" value={form.weight} onChange={handleChange} type="number" className="input-style" />
+              <input name="height" placeholder="Height (cm)" value={form.height} onChange={handleChange} type="number" className="input-style" />
             </>
           )}
-          <button
-            type="submit"
-            className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600"
-          >
+
+          <button type="submit" className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition">
             Sign Up
           </button>
         </form>
-        <p className="mt-4 text-center">
+        <p className="text-sm text-center mt-4">
           Already have an account?{' '}
-          <a href="/login" className="text-blue-500 hover:underline">
+          <a href="/login" className="text-green-600 hover:underline">
             Login
           </a>
         </p>

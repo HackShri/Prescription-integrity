@@ -1,11 +1,60 @@
-@tailwind preflight;
-@tailwind screens;
-@tailwind typography;
-@tailwind forms;
-@tailwind aspect-ratio;
-@tailwind line-clamp;
-@tailwind typography;
-@tailwind container;
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Apply a modern, neutral base style */
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 100% 50%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+  }
+  .input-style {
+  @apply w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500;
+}
+  .button-style {
+    @apply bg-blue-500 text-white px-4 py-2 rounded-md transition hover:bg-blue-600 focus:outline-none;
+  }
+  .card-style {
+    @apply bg-white shadow-md rounded-lg p-4;
+  }
+  .card-header-style {
+    @apply text-lg font-semibold text-gray-800 mb-2;
+  }
+  .card-content-style {
+    @apply text-gray-700;
+  }
+  body {
+    @apply bg-gray-100 text-gray-900 antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold text-gray-800;
+  }
+
+  a {
+    @apply text-blue-600 hover:underline;
+  }
+
+  input, select, textarea {
+    @apply border border-gray-300 rounded-md px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent;
+  }
+
+  button {
+    @apply rounded-md bg-blue-500 text-white px-4 py-2 transition hover:bg-blue-600 focus:outline-none;
+  }
+}
